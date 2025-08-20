@@ -11,6 +11,9 @@ module.exports = withNativeFederation({
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
+    '@tailwindcss/postcss',
+    'postcss',
+    'tailwindcss'
     // Add further packages you don't need at runtime
   ]
 

@@ -7,7 +7,7 @@
 			"projectType": "application",
 			"schematics": {
 				"@schematics/angular:component": {
-					"style": "scss"
+					"style": "css"
 				}
 			},
 			"root": "",
@@ -16,7 +16,11 @@
 			"architect": {
 				"build": {
 					"builder": "@angular-architects/native-federation:build",
-					"options": {},
+					"options": {
+						"styles": [
+							"@angular/material/prebuilt-themes/azure-blue.css"
+						]
+					},
 					"configurations": {
 						"production": {
 							"target": "ang-federation-host:esbuild:production"
@@ -48,7 +52,7 @@
 							"zone.js/testing"
 						],
 						"tsConfig": "tsconfig.spec.json",
-						"inlineStyleLanguage": "scss",
+						"inlineStyleLanguage": "css",
 						"assets": [
 							{
 								"glob": "**/*",
@@ -56,7 +60,8 @@
 							}
 						],
 						"styles": [
-							"src/styles.scss"
+							"@angular/material/prebuilt-themes/azure-blue.css",
+							"src/styles.css"
 						],
 						"scripts": []
 					}
@@ -72,7 +77,7 @@
 							"es-module-shims"
 						],
 						"tsConfig": "tsconfig.app.json",
-						"inlineStyleLanguage": "scss",
+						"inlineStyleLanguage": "css",
 						"assets": [
 							{
 								"glob": "**/*",
@@ -80,7 +85,7 @@
 							}
 						],
 						"styles": [
-							"src/styles.scss"
+							"src/styles.css"
 						],
 						"scripts": []
 					},
