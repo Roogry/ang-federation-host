@@ -1,0 +1,14 @@
+<div class="flex flex-col gap-2">
+  <div class="content-title">
+    <h1 class="text-xl font-bold">Profile</h1>
+  </div>
+  <div class="content-body">
+    <p>profile-page works!</p>
+    
+    <div class="district-container">
+      <ng-container id="remote-district" #districtContainer></ng-container>
+      <div *ngIf="isLoading">Loading...</div>
+      <div *ngIf="error" class="error">{{ error }}</div>
+    </div>
+  </div>
+</div>
