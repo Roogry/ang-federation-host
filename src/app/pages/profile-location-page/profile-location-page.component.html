@@ -1,0 +1,52 @@
+<div class="flex flex-col gap-5">
+  <div class="content-title">
+    <h1 class="text-xl font-bold">Edit Location</h1>
+  </div>
+  <div class="content-body">
+    <div id="location-selector-container" class="flex flex-col gap-3">
+      <div class="province-selector flex flex-col gap-1">
+        <h3 class="font-semibold text-gray-700">Select Province</h3>
+
+        @if (loadingStatus().province) {
+          <p>Loading province selector...</p>
+        }
+
+        <ng-container 
+          remoteComponent="ang-federation-remote" 
+          remoteModule="./Provinsi"
+          (componentLoaded)="onComponentLoaded('province', $event)"
+        ></ng-container>
+      </div>
+
+      <div class="regency-selector flex flex-col gap-1">
+        <h3 class="font-semibold text-gray-700">Select Regency {{ selectedProvince()?.name | titlecase }}</h3>
+
+        @if (loadingStatus().regency) {
+          <p>Loading regency selector...</p>
+        }
+
+        <ng-container 
+          remoteComponent="ang-federation-remote" 
+          remoteModule="./Kota"
+          [inputs]="regencyComponentInputs()"
+          (componentLoaded)="onComponentLoaded('regency', $event)"
+        ></ng-container>
+      </div>
+
+      <div class="district-selector flex flex-col gap-1">
+        <h3 class="font-semibold text-gray-700">Select District {{ selectedRegency()?.name | titlecase }}</h3>
+
+        @if (loadingStatus().district) {
+          <p>Loading district selector...</p>
+        }
+
+        <ng-container 
+          remoteComponent="ang-federation-remote" 
+          remoteModule="./Kecamatan"
+          [inputs]="districtComponentInputs()"
+          (componentLoaded)="onComponentLoaded('district', $event)"
+        ></ng-container>
+      </div>
+    </div>
+  </div>
+</div>

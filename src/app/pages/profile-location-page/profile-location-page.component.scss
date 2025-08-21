@@ -1,0 +1,19 @@
+#location-selector-container ::ng-deep dropdown .container {
+  p:first-child {
+    display: none;
+  }
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+  .mat-mdc-text-field-wrapper {
+    border-radius: 16px;
+  }
+  .mdc-notched-outline__leading {
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+  }
+  .mdc-notched-outline__trailing {
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+}

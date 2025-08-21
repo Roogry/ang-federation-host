@@ -15,16 +15,8 @@
             </div>
 
             <mat-nav-list>
-              <a
-                mat-list-item
-                routerLink="/profile"
-                routerLinkActive
-                [activated]="true"
-                >Profile</a
-              >
-
-              @for (nav of fillerNav; track nav) {
-              <a mat-list-item>{{ nav }}</a>
+              @for (nav of listNav; track nav) {
+              <a mat-list-item [href]="nav.href" [activated]="isParentActive(nav.href)">{{ nav.title }}</a>
               }
             </mat-nav-list>
           </div>
