@@ -1,5 +1,7 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, WritableSignal } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, TitleCasePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 import { RemoteComponentDirective } from '../../shared/directive/remote-component.directive';
 
 type SelectorItem = {
@@ -9,9 +11,15 @@ type SelectorItem = {
 
 @Component({
   selector: 'app-profile-location-page',
-  imports: [CommonModule, RemoteComponentDirective, TitleCasePipe],
   templateUrl: './profile-location-page.component.html',
   styleUrl: './profile-location-page.component.scss',
+  imports: [
+    CommonModule,
+    RemoteComponentDirective,
+    TitleCasePipe,
+    MatCardModule,
+    MatIconModule,
+  ],
 })
 export class ProfileLocationPageComponent {
   private componentInstances = signal<Record<string, any>>({});
@@ -22,16 +30,28 @@ export class ProfileLocationPageComponent {
     district: true,
   });
 
+  resetCounter: WritableSignal<any> = signal({
+    province: 0,
+    regency: 0,
+    district: 0,
+  });
+
   selectedProvince = signal<SelectorItem | null>(null);
   selectedRegency = signal<SelectorItem | null>(null);
   selectedDistrict = signal<SelectorItem | null>(null);
 
+  provinceComponentInputs = computed(() => ({
+    resetTrigger: this.resetCounter().province,
+  }));
+
   regencyComponentInputs = computed(() => ({
     provinceId: this.selectedProvince()?.id ?? '52',
+    resetTrigger: this.resetCounter().regency,
   }));
 
   districtComponentInputs = computed(() => ({
     regencyId: this.selectedRegency()?.id ?? '1101',
+    resetTrigger: this.resetCounter().district,
   }));
 
   onComponentLoaded(widgetName: string, instance: any): void {
@@ -63,6 +83,34 @@ export class ProfileLocationPageComponent {
         console.log(district);
         this.selectedDistrict.set(district);
       });
+    }
+  }
+
+  clearSelector(widgetName: string): void {
+    if (widgetName === 'province') {
+      this.selectedProvince.set(null);
+      this.selectedRegency.set(null);
+      this.selectedDistrict.set(null);
+      this.resetCounter.update((counter) => ({
+        ...counter,
+        province: counter.province + 1,
+        regency: counter.regency + 1,
+        district: counter.district + 1,
+      }));
+    } else if (widgetName === 'regency') {
+      this.selectedRegency.set(null);
+      this.selectedDistrict.set(null);
+      this.resetCounter.update((counter) => ({
+        ...counter,
+        regency: counter.regency + 1,
+        district: counter.district + 1,
+      }));
+    } else if (widgetName === 'district') {
+      this.selectedDistrict.set(null);
+      this.resetCounter.update((counter) => ({
+        ...counter,
+        district: counter.district + 1,
+      }));
     }
   }
 }

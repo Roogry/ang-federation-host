@@ -3,49 +3,130 @@
     <h1 class="text-xl font-bold">Edit Location</h1>
   </div>
   <div class="content-body">
-    <div id="location-selector-container" class="flex flex-col gap-3">
-      <div class="province-selector flex flex-col gap-1">
-        <h3 class="font-semibold text-gray-700">Select Province</h3>
+    <div id="location-container" class="flex flex-col gap-4">
+      <div id="location-selector" class="flex flex-row gap-5">
+        <div class="province-selector flex flex-col gap-1">
+          <h3 class="font-semibold text-gray-700">Select Province</h3>
 
-        @if (loadingStatus().province) {
+          @if (loadingStatus().province) {
           <p>Loading province selector...</p>
-        }
+          }
+          <ng-container
+            remoteComponent="ang-federation-remote"
+            remoteModule="./Provinsi"
+            [inputs]="provinceComponentInputs()"
+            (componentLoaded)="onComponentLoaded('province', $event)"
+          ></ng-container>
+        </div>
 
-        <ng-container 
-          remoteComponent="ang-federation-remote" 
-          remoteModule="./Provinsi"
-          (componentLoaded)="onComponentLoaded('province', $event)"
-        ></ng-container>
-      </div>
+        <div class="regency-selector flex flex-col gap-1">
+          <h3 class="font-semibold text-gray-700">
+            Select Regency {{ selectedProvince()?.name | titlecase }}
+          </h3>
 
-      <div class="regency-selector flex flex-col gap-1">
-        <h3 class="font-semibold text-gray-700">Select Regency {{ selectedProvince()?.name | titlecase }}</h3>
-
-        @if (loadingStatus().regency) {
+          @if (loadingStatus().regency) {
           <p>Loading regency selector...</p>
-        }
+          }
+          <ng-container
+            remoteComponent="ang-federation-remote"
+            remoteModule="./Kota"
+            [inputs]="regencyComponentInputs()"
+            (componentLoaded)="onComponentLoaded('regency', $event)"
+          ></ng-container>
+        </div>
 
-        <ng-container 
-          remoteComponent="ang-federation-remote" 
-          remoteModule="./Kota"
-          [inputs]="regencyComponentInputs()"
-          (componentLoaded)="onComponentLoaded('regency', $event)"
-        ></ng-container>
+        <div class="district-selector flex flex-col gap-1">
+          <h3 class="font-semibold text-gray-700">
+            Select District {{ selectedRegency()?.name | titlecase }}
+          </h3>
+
+          @if (loadingStatus().district) {
+          <p>Loading district selector...</p>
+          }
+          <ng-container
+            remoteComponent="ang-federation-remote"
+            remoteModule="./Kecamatan"
+            [inputs]="districtComponentInputs()"
+            (componentLoaded)="onComponentLoaded('district', $event)"
+          ></ng-container>
+        </div>
       </div>
 
-      <div class="district-selector flex flex-col gap-1">
-        <h3 class="font-semibold text-gray-700">Select District {{ selectedRegency()?.name | titlecase }}</h3>
+      <div id="location-action" class="flex flex-col">
+        <mat-card class="example-card" appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>
+              <h2 class="font-medium text-lg">Hasil Pilihan</h2>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              Berikut hasil pemilihan lokasi dari komponen remote provinsi,
+              kota, dan kecamatan yang dipilih
+            </p>
+          </mat-card-content>
+          <mat-card-footer class="example-card-footer p-4">
+            <div class="flex flex-row gap-3">
+              <div
+                class="border rounded-md px-2 py-1 flex gap-1 items-center text-sm font-medium"
+              >
+                {{ selectedProvince()?.name ?? "Belum pilih provinsi" | titlecase }}
 
-        @if (loadingStatus().district) {
-          <p>Loading district selector...</p>
-        }
+                @if (selectedProvince()) {
+                <button
+                  mat-icon-button
+                  aria-label="clear province selector"
+                  class="flex items-center"
+                  (click)="clearSelector('province')"
+                >
+                  <mat-icon
+                    class="!text-lg !h-[1.125rem] !w-[1.125rem] !flex items-center justify-center rounded-full hover:cursor-pointer hover:outline-2 hover:outline-gray-500"
+                    >cancel</mat-icon
+                  >
+                </button>
+                }
+              </div>
+              <div
+                class="border rounded-md px-2 py-1 flex gap-1 items-center text-sm font-medium"
+              >
+                {{ selectedRegency()?.name ?? "Belum pilih kota" | titlecase }}
 
-        <ng-container 
-          remoteComponent="ang-federation-remote" 
-          remoteModule="./Kecamatan"
-          [inputs]="districtComponentInputs()"
-          (componentLoaded)="onComponentLoaded('district', $event)"
-        ></ng-container>
+                @if (selectedRegency()) {
+                <button
+                  mat-icon-button
+                  aria-label="clear regency selector"
+                  class="flex items-center"
+                  (click)="clearSelector('regency')"
+                >
+                  <mat-icon
+                    class="!text-lg !h-[1.125rem] !w-[1.125rem] !flex items-center justify-center rounded-full hover:cursor-pointer hover:outline-2 hover:outline-gray-500"
+                    >cancel</mat-icon
+                  >
+                </button>
+                }
+              </div>
+              <div
+                class="border rounded-md px-2 py-1 flex gap-1 items-center text-sm font-medium"
+              >
+                {{ selectedDistrict()?.name ?? "Belum pilih kecamatan" | titlecase }}
+
+                @if (selectedDistrict()) {
+                <button
+                  mat-icon-button
+                  aria-label="clear district selector"
+                  class="flex items-center"
+                  (click)="clearSelector('district')"
+                >
+                  <mat-icon
+                    class="!text-lg !h-[1.125rem] !w-[1.125rem] !flex items-center justify-center rounded-full hover:cursor-pointer hover:outline-2 hover:outline-gray-500"
+                    >cancel</mat-icon
+                  >
+                </button>
+                }
+              </div>
+            </div>
+          </mat-card-footer>
+        </mat-card>
       </div>
     </div>
   </div>
